@@ -1,0 +1,24 @@
+name: Copy files on server after each update on master
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Copy to remote server
+        uses: pierrickdelrieu/scp-action@0.1.0
+        with:
+          host: ${{ secrets.DESTINATION_HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source_directory: ${{ secrets.SOURCE_DIRECTORY }}
+          destination_directory: ${{ secrets.DESTINATION_DIRECTORY }}
+          rm: true
